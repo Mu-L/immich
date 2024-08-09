@@ -37,6 +37,7 @@ FROM
       "asset"."stackId" AS "asset_stackId",
       "asset"."duplicateId" AS "asset_duplicateId",
       "stack"."id" AS "stack_id",
+      "stack"."ownerId" AS "stack_ownerId",
       "stack"."primaryAssetId" AS "stack_primaryAssetId",
       "stackedAssets"."id" AS "stackedAssets_id",
       "stackedAssets"."deviceAssetId" AS "stackedAssets_deviceAssetId",
@@ -133,6 +134,7 @@ SELECT
   "asset"."stackId" AS "asset_stackId",
   "asset"."duplicateId" AS "asset_duplicateId",
   "stack"."id" AS "stack_id",
+  "stack"."ownerId" AS "stack_ownerId",
   "stack"."primaryAssetId" AS "stack_primaryAssetId",
   "stackedAssets"."id" AS "stackedAssets_id",
   "stackedAssets"."deviceAssetId" AS "stackedAssets_deviceAssetId",
@@ -400,6 +402,7 @@ SELECT
   "exif"."profileDescription" AS "exif_profileDescription",
   "exif"."colorspace" AS "exif_colorspace",
   "exif"."bitsPerSample" AS "exif_bitsPerSample",
+  "exif"."rating" AS "exif_rating",
   "exif"."fps" AS "exif_fps"
 FROM
   "assets" "asset"

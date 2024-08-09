@@ -3109,6 +3109,60 @@
         ]
       }
     },
+    "/map/reverse-geocode": {
+      "get": {
+        "operationId": "reverseGeocode",
+        "parameters": [
+          {
+            "name": "lat",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "name": "lon",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MapReverseGeocodeResponseDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "cookie": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "tags": [
+          "Map"
+        ]
+      }
+    },
     "/map/style.json": {
       "get": {
         "operationId": "getMapStyle",
@@ -3660,11 +3714,7 @@
             "required": true,
             "in": "query",
             "schema": {
-              "enum": [
-                "shared-by",
-                "shared-with"
-              ],
-              "type": "string"
+              "$ref": "#/components/schemas/PartnerDirection"
             }
           }
         ],
@@ -3828,6 +3878,29 @@
       "get": {
         "operationId": "getAllPeople",
         "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number for pagination",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Number of items per page",
+            "schema": {
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 500,
+              "type": "number"
+            }
+          },
           {
             "name": "withHidden",
             "required": false,
@@ -4042,6 +4115,8 @@
     },
     "/people/{id}/assets": {
       "get": {
+        "deprecated": true,
+        "description": "This property was deprecated in v1.113.0",
         "operationId": "getPersonAssets",
         "parameters": [
           {
@@ -4081,8 +4156,12 @@
           }
         ],
         "tags": [
-          "People"
-        ]
+          "People",
+          "Deprecated"
+        ],
+        "x-immich-lifecycle": {
+          "deprecatedAt": "v1.113.0"
+        }
       }
     },
     "/people/{id}/merge": {
@@ -4655,6 +4734,15 @@
             }
           },
           {
+            "name": "includeNull",
+            "required": false,
+            "in": "query",
+            "description": "This property was added in v111.0.0",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "make",
             "required": false,
             "in": "query",
@@ -5026,10 +5114,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/LicenseResponseDto"
                 }
               }
             },
+            "description": ""
+          },
+          "404": {
             "description": ""
           }
         },
@@ -7011,7 +7102,7 @@
   "info": {
     "title": "Immich",
     "description": "Immich API",
-    "version": "1.107.2",
+    "version": "1.111.0",
     "contact": {}
   },
   "tags": [],
@@ -7140,11 +7231,7 @@
             "type": "string"
           },
           "type": {
-            "enum": [
-              "comment",
-              "like"
-            ],
-            "type": "string"
+            "$ref": "#/components/schemas/ReactionType"
           },
           "user": {
             "$ref": "#/components/schemas/UserResponseDto"
@@ -7461,6 +7548,11 @@
             "type": "number"
           },
           "longitude": {
+            "type": "number"
+          },
+          "rating": {
+            "maximum": 5,
+            "minimum": 0,
             "type": "number"
           },
           "removeParent": {
@@ -8615,6 +8707,11 @@
             "nullable": true,
             "type": "string"
           },
+          "rating": {
+            "default": null,
+            "nullable": true,
+            "type": "number"
+          },
           "state": {
             "default": null,
             "nullable": true,
@@ -9106,6 +9203,28 @@
         ],
         "type": "object"
       },
+      "MapReverseGeocodeResponseDto": {
+        "properties": {
+          "city": {
+            "nullable": true,
+            "type": "string"
+          },
+          "country": {
+            "nullable": true,
+            "type": "string"
+          },
+          "state": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "city",
+          "country",
+          "state"
+        ],
+        "type": "object"
+      },
       "MapTheme": {
         "enum": [
           "light",
@@ -9213,10 +9332,7 @@
             "type": "string"
           },
           "type": {
-            "enum": [
-              "on_this_day"
-            ],
-            "type": "string"
+            "$ref": "#/components/schemas/MemoryType"
           },
           "updatedAt": {
             "format": "date-time",
@@ -9287,9 +9403,11 @@
             "type": "string"
           },
           "city": {
+            "nullable": true,
             "type": "string"
           },
           "country": {
+            "nullable": true,
             "type": "string"
           },
           "createdAfter": {
@@ -9335,6 +9453,7 @@
             "type": "boolean"
           },
           "lensModel": {
+            "nullable": true,
             "type": "string"
           },
           "libraryId": {
@@ -9346,6 +9465,7 @@
             "type": "string"
           },
           "model": {
+            "nullable": true,
             "type": "string"
           },
           "order": {
@@ -9377,6 +9497,7 @@
             "type": "number"
           },
           "state": {
+            "nullable": true,
             "type": "string"
           },
           "takenAfter": {
@@ -9473,6 +9594,13 @@
         ],
         "type": "object"
       },
+      "PartnerDirection": {
+        "enum": [
+          "shared-by",
+          "shared-with"
+        ],
+        "type": "string"
+      },
       "PartnerResponseDto": {
         "properties": {
           "avatarColor": {
@@ -9525,6 +9653,10 @@
       },
       "PeopleResponseDto": {
         "properties": {
+          "hasNextPage": {
+            "description": "This property was added in v1.110.0",
+            "type": "boolean"
+          },
           "hidden": {
             "type": "integer"
           },
@@ -9742,6 +9874,32 @@
         ],
         "type": "object"
       },
+      "PurchaseResponse": {
+        "properties": {
+          "hideBuyButtonUntil": {
+            "type": "string"
+          },
+          "showSupportBadge": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "hideBuyButtonUntil",
+          "showSupportBadge"
+        ],
+        "type": "object"
+      },
+      "PurchaseUpdate": {
+        "properties": {
+          "hideBuyButtonUntil": {
+            "type": "string"
+          },
+          "showSupportBadge": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
       "QueueStatusDto": {
         "properties": {
           "isActive": {
@@ -9755,6 +9913,25 @@
           "isActive",
           "isPaused"
         ],
+        "type": "object"
+      },
+      "RatingResponse": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled"
+        ],
+        "type": "object"
+      },
+      "RatingUpdate": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        },
         "type": "object"
       },
       "ReactionLevel": {
@@ -10483,9 +10660,11 @@
       "SmartSearchDto": {
         "properties": {
           "city": {
+            "nullable": true,
             "type": "string"
           },
           "country": {
+            "nullable": true,
             "type": "string"
           },
           "createdAfter": {
@@ -10521,6 +10700,7 @@
             "type": "boolean"
           },
           "lensModel": {
+            "nullable": true,
             "type": "string"
           },
           "libraryId": {
@@ -10532,6 +10712,7 @@
             "type": "string"
           },
           "model": {
+            "nullable": true,
             "type": "string"
           },
           "page": {
@@ -10554,6 +10735,7 @@
             "type": "number"
           },
           "state": {
+            "nullable": true,
             "type": "string"
           },
           "takenAfter": {
@@ -10688,6 +10870,12 @@
             },
             "type": "array"
           },
+          "acceptedContainers": {
+            "items": {
+              "$ref": "#/components/schemas/VideoContainer"
+            },
+            "type": "array"
+          },
           "acceptedVideoCodecs": {
             "items": {
               "$ref": "#/components/schemas/VideoCodec"
@@ -10759,6 +10947,7 @@
           "accel",
           "accelDecode",
           "acceptedAudioCodecs",
+          "acceptedContainers",
           "acceptedVideoCodecs",
           "bframes",
           "cqMode",
@@ -11027,6 +11216,9 @@
           "mobileRedirectUri": {
             "type": "string"
           },
+          "profileSigningAlgorithm": {
+            "type": "string"
+          },
           "scope": {
             "type": "string"
           },
@@ -11051,6 +11243,7 @@
           "issuerUrl",
           "mobileOverrideEnabled",
           "mobileRedirectUri",
+          "profileSigningAlgorithm",
           "scope",
           "signingAlgorithm",
           "storageLabelClaim",
@@ -11401,6 +11594,11 @@
           },
           "longitude": {
             "type": "number"
+          },
+          "rating": {
+            "maximum": 5,
+            "minimum": 0,
+            "type": "number"
           }
         },
         "type": "object"
@@ -11698,13 +11896,21 @@
           },
           "memories": {
             "$ref": "#/components/schemas/MemoryResponse"
+          },
+          "purchase": {
+            "$ref": "#/components/schemas/PurchaseResponse"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/RatingResponse"
           }
         },
         "required": [
           "avatar",
           "download",
           "emailNotifications",
-          "memories"
+          "memories",
+          "purchase",
+          "rating"
         ],
         "type": "object"
       },
@@ -11721,6 +11927,12 @@
           },
           "memories": {
             "$ref": "#/components/schemas/MemoryUpdate"
+          },
+          "purchase": {
+            "$ref": "#/components/schemas/PurchaseUpdate"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/RatingUpdate"
           }
         },
         "type": "object"
@@ -11838,6 +12050,15 @@
           "hevc",
           "vp9",
           "av1"
+        ],
+        "type": "string"
+      },
+      "VideoContainer": {
+        "enum": [
+          "mov",
+          "mp4",
+          "ogg",
+          "webm"
         ],
         "type": "string"
       }

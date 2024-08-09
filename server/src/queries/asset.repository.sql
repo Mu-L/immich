@@ -58,6 +58,7 @@ SELECT
   "exifInfo"."profileDescription" AS "exifInfo_profileDescription",
   "exifInfo"."colorspace" AS "exifInfo_colorspace",
   "exifInfo"."bitsPerSample" AS "exifInfo_bitsPerSample",
+  "exifInfo"."rating" AS "exifInfo_rating",
   "exifInfo"."fps" AS "exifInfo_fps"
 FROM
   "assets" "entity"
@@ -177,6 +178,7 @@ SELECT
   "AssetEntity__AssetEntity_exifInfo"."profileDescription" AS "AssetEntity__AssetEntity_exifInfo_profileDescription",
   "AssetEntity__AssetEntity_exifInfo"."colorspace" AS "AssetEntity__AssetEntity_exifInfo_colorspace",
   "AssetEntity__AssetEntity_exifInfo"."bitsPerSample" AS "AssetEntity__AssetEntity_exifInfo_bitsPerSample",
+  "AssetEntity__AssetEntity_exifInfo"."rating" AS "AssetEntity__AssetEntity_exifInfo_rating",
   "AssetEntity__AssetEntity_exifInfo"."fps" AS "AssetEntity__AssetEntity_exifInfo_fps",
   "AssetEntity__AssetEntity_smartInfo"."assetId" AS "AssetEntity__AssetEntity_smartInfo_assetId",
   "AssetEntity__AssetEntity_smartInfo"."tags" AS "AssetEntity__AssetEntity_smartInfo_tags",
@@ -205,6 +207,7 @@ SELECT
   "8258e303a73a72cf6abb13d73fb592dde0d68280"."faceAssetId" AS "8258e303a73a72cf6abb13d73fb592dde0d68280_faceAssetId",
   "8258e303a73a72cf6abb13d73fb592dde0d68280"."isHidden" AS "8258e303a73a72cf6abb13d73fb592dde0d68280_isHidden",
   "AssetEntity__AssetEntity_stack"."id" AS "AssetEntity__AssetEntity_stack_id",
+  "AssetEntity__AssetEntity_stack"."ownerId" AS "AssetEntity__AssetEntity_stack_ownerId",
   "AssetEntity__AssetEntity_stack"."primaryAssetId" AS "AssetEntity__AssetEntity_stack_primaryAssetId",
   "bd93d5747511a4dad4923546c51365bf1a803774"."id" AS "bd93d5747511a4dad4923546c51365bf1a803774_id",
   "bd93d5747511a4dad4923546c51365bf1a803774"."deviceAssetId" AS "bd93d5747511a4dad4923546c51365bf1a803774_deviceAssetId",
@@ -627,8 +630,10 @@ SELECT
   "exifInfo"."profileDescription" AS "exifInfo_profileDescription",
   "exifInfo"."colorspace" AS "exifInfo_colorspace",
   "exifInfo"."bitsPerSample" AS "exifInfo_bitsPerSample",
+  "exifInfo"."rating" AS "exifInfo_rating",
   "exifInfo"."fps" AS "exifInfo_fps",
   "stack"."id" AS "stack_id",
+  "stack"."ownerId" AS "stack_ownerId",
   "stack"."primaryAssetId" AS "stack_primaryAssetId",
   "stackedAssets"."id" AS "stackedAssets_id",
   "stackedAssets"."deviceAssetId" AS "stackedAssets_deviceAssetId",
@@ -767,8 +772,10 @@ SELECT
   "exifInfo"."profileDescription" AS "exifInfo_profileDescription",
   "exifInfo"."colorspace" AS "exifInfo_colorspace",
   "exifInfo"."bitsPerSample" AS "exifInfo_bitsPerSample",
+  "exifInfo"."rating" AS "exifInfo_rating",
   "exifInfo"."fps" AS "exifInfo_fps",
   "stack"."id" AS "stack_id",
+  "stack"."ownerId" AS "stack_ownerId",
   "stack"."primaryAssetId" AS "stack_primaryAssetId",
   "stackedAssets"."id" AS "stackedAssets_id",
   "stackedAssets"."deviceAssetId" AS "stackedAssets_deviceAssetId",
@@ -883,8 +890,10 @@ SELECT
   "exifInfo"."profileDescription" AS "exifInfo_profileDescription",
   "exifInfo"."colorspace" AS "exifInfo_colorspace",
   "exifInfo"."bitsPerSample" AS "exifInfo_bitsPerSample",
+  "exifInfo"."rating" AS "exifInfo_rating",
   "exifInfo"."fps" AS "exifInfo_fps",
   "stack"."id" AS "stack_id",
+  "stack"."ownerId" AS "stack_ownerId",
   "stack"."primaryAssetId" AS "stack_primaryAssetId",
   "stackedAssets"."id" AS "stackedAssets_id",
   "stackedAssets"."deviceAssetId" AS "stackedAssets_deviceAssetId",
@@ -1049,8 +1058,10 @@ SELECT
   "exifInfo"."profileDescription" AS "exifInfo_profileDescription",
   "exifInfo"."colorspace" AS "exifInfo_colorspace",
   "exifInfo"."bitsPerSample" AS "exifInfo_bitsPerSample",
+  "exifInfo"."rating" AS "exifInfo_rating",
   "exifInfo"."fps" AS "exifInfo_fps",
   "stack"."id" AS "stack_id",
+  "stack"."ownerId" AS "stack_ownerId",
   "stack"."primaryAssetId" AS "stack_primaryAssetId"
 FROM
   "assets" "asset"
@@ -1124,8 +1135,10 @@ SELECT
   "exifInfo"."profileDescription" AS "exifInfo_profileDescription",
   "exifInfo"."colorspace" AS "exifInfo_colorspace",
   "exifInfo"."bitsPerSample" AS "exifInfo_bitsPerSample",
+  "exifInfo"."rating" AS "exifInfo_rating",
   "exifInfo"."fps" AS "exifInfo_fps",
   "stack"."id" AS "stack_id",
+  "stack"."ownerId" AS "stack_ownerId",
   "stack"."primaryAssetId" AS "stack_primaryAssetId"
 FROM
   "assets" "asset"

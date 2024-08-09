@@ -152,6 +152,7 @@ part 'model/login_credential_dto.dart';
 part 'model/login_response_dto.dart';
 part 'model/logout_response_dto.dart';
 part 'model/map_marker_response_dto.dart';
+part 'model/map_reverse_geocode_response_dto.dart';
 part 'model/map_theme.dart';
 part 'model/memory_create_dto.dart';
 part 'model/memory_lane_response_dto.dart';
@@ -166,6 +167,7 @@ part 'model/o_auth_authorize_response_dto.dart';
 part 'model/o_auth_callback_dto.dart';
 part 'model/o_auth_config_dto.dart';
 part 'model/on_this_day_dto.dart';
+part 'model/partner_direction.dart';
 part 'model/partner_response_dto.dart';
 part 'model/path_entity_type.dart';
 part 'model/path_type.dart';
@@ -178,7 +180,11 @@ part 'model/person_statistics_response_dto.dart';
 part 'model/person_update_dto.dart';
 part 'model/person_with_faces_response_dto.dart';
 part 'model/places_response_dto.dart';
+part 'model/purchase_response.dart';
+part 'model/purchase_update.dart';
 part 'model/queue_status_dto.dart';
+part 'model/rating_response.dart';
+part 'model/rating_update.dart';
 part 'model/reaction_level.dart';
 part 'model/reaction_type.dart';
 part 'model/reverse_geocoding_state_response_dto.dart';
@@ -262,6 +268,7 @@ part 'model/validate_library_dto.dart';
 part 'model/validate_library_import_path_response_dto.dart';
 part 'model/validate_library_response_dto.dart';
 part 'model/video_codec.dart';
+part 'model/video_container.dart';
 
 
 /// An [ApiClient] instance that uses the default values obtained from

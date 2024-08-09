@@ -1,6 +1,6 @@
 /**
  * Immich
- * 1.107.2
+ * 1.111.0
  * DO NOT MODIFY - This file has been generated using oazapfts.
  * See https://www.npmjs.com/package/oazapfts
  */
@@ -26,7 +26,7 @@ export type ActivityResponseDto = {
     comment?: string | null;
     createdAt: string;
     id: string;
-    "type": Type;
+    "type": ReactionType;
     user: UserResponseDto;
 };
 export type ActivityCreateDto = {
@@ -95,11 +95,20 @@ export type EmailNotificationsResponse = {
 export type MemoryResponse = {
     enabled: boolean;
 };
+export type PurchaseResponse = {
+    hideBuyButtonUntil: string;
+    showSupportBadge: boolean;
+};
+export type RatingResponse = {
+    enabled: boolean;
+};
 export type UserPreferencesResponseDto = {
     avatar: AvatarResponse;
     download: DownloadResponse;
     emailNotifications: EmailNotificationsResponse;
     memories: MemoryResponse;
+    purchase: PurchaseResponse;
+    rating: RatingResponse;
 };
 export type AvatarUpdate = {
     color?: UserAvatarColor;
@@ -115,11 +124,20 @@ export type EmailNotificationsUpdate = {
 export type MemoryUpdate = {
     enabled?: boolean;
 };
+export type PurchaseUpdate = {
+    hideBuyButtonUntil?: string;
+    showSupportBadge?: boolean;
+};
+export type RatingUpdate = {
+    enabled?: boolean;
+};
 export type UserPreferencesUpdateDto = {
     avatar?: AvatarUpdate;
     download?: DownloadUpdate;
     emailNotifications?: EmailNotificationsUpdate;
     memories?: MemoryUpdate;
+    purchase?: PurchaseUpdate;
+    rating?: RatingUpdate;
 };
 export type AlbumUserResponseDto = {
     role: AlbumUserRole;
@@ -145,6 +163,7 @@ export type ExifResponseDto = {
     modifyDate?: string | null;
     orientation?: string | null;
     projectionType?: string | null;
+    rating?: number | null;
     state?: string | null;
     timeZone?: string | null;
 };
@@ -320,6 +339,7 @@ export type AssetBulkUpdateDto = {
     isFavorite?: boolean;
     latitude?: number;
     longitude?: number;
+    rating?: number;
     removeParent?: boolean;
     stackParentId?: string;
 };
@@ -371,6 +391,7 @@ export type UpdateAssetDto = {
     isFavorite?: boolean;
     latitude?: number;
     longitude?: number;
+    rating?: number;
 };
 export type AssetMediaReplaceDto = {
     assetData: Blob;
@@ -544,6 +565,11 @@ export type MapMarkerResponseDto = {
     lon: number;
     state: string | null;
 };
+export type MapReverseGeocodeResponseDto = {
+    city: string | null;
+    country: string | null;
+    state: string | null;
+};
 export type OnThisDayDto = {
     year: number;
 };
@@ -557,7 +583,7 @@ export type MemoryResponseDto = {
     memoryAt: string;
     ownerId: string;
     seenAt?: string;
-    "type": Type2;
+    "type": MemoryType;
     updatedAt: string;
 };
 export type MemoryCreateDto = {
@@ -607,6 +633,8 @@ export type UpdatePartnerDto = {
     inTimeline: boolean;
 };
 export type PeopleResponseDto = {
+    /** This property was added in v1.110.0 */
+    hasNextPage?: boolean;
     hidden: number;
     people: PersonResponseDto[];
     total: number;
@@ -691,8 +719,8 @@ export type SearchExploreResponseDto = {
 };
 export type MetadataSearchDto = {
     checksum?: string;
-    city?: string;
-    country?: string;
+    city?: string | null;
+    country?: string | null;
     createdAfter?: string;
     createdBefore?: string;
     deviceAssetId?: string;
@@ -706,10 +734,10 @@ export type MetadataSearchDto = {
     isNotInAlbum?: boolean;
     isOffline?: boolean;
     isVisible?: boolean;
-    lensModel?: string;
+    lensModel?: string | null;
     libraryId?: string | null;
     make?: string;
-    model?: string;
+    model?: string | null;
     order?: AssetOrder;
     originalFileName?: string;
     originalPath?: string;
@@ -717,7 +745,7 @@ export type MetadataSearchDto = {
     personIds?: string[];
     previewPath?: string;
     size?: number;
-    state?: string;
+    state?: string | null;
     takenAfter?: string;
     takenBefore?: string;
     thumbnailPath?: string;
@@ -765,8 +793,8 @@ export type PlacesResponseDto = {
     name: string;
 };
 export type SmartSearchDto = {
-    city?: string;
-    country?: string;
+    city?: string | null;
+    country?: string | null;
     createdAfter?: string;
     createdBefore?: string;
     deviceId?: string;
@@ -777,15 +805,15 @@ export type SmartSearchDto = {
     isNotInAlbum?: boolean;
     isOffline?: boolean;
     isVisible?: boolean;
-    lensModel?: string;
+    lensModel?: string | null;
     libraryId?: string | null;
     make?: string;
-    model?: string;
+    model?: string | null;
     page?: number;
     personIds?: string[];
     query: string;
     size?: number;
-    state?: string;
+    state?: string | null;
     takenAfter?: string;
     takenBefore?: string;
     trashedAfter?: string;
@@ -880,12 +908,12 @@ export type ServerVersionResponseDto = {
     minor: number;
     patch: number;
 };
-export type LicenseKeyDto = {
+export type LicenseResponseDto = {
+    activatedAt: string;
     activationKey: string;
     licenseKey: string;
 };
-export type LicenseResponseDto = {
-    activatedAt: string;
+export type LicenseKeyDto = {
     activationKey: string;
     licenseKey: string;
 };
@@ -960,6 +988,7 @@ export type SystemConfigFFmpegDto = {
     accel: TranscodeHWAccel;
     accelDecode: boolean;
     acceptedAudioCodecs: AudioCodec[];
+    acceptedContainers: VideoContainer[];
     acceptedVideoCodecs: VideoCodec[];
     bframes: number;
     cqMode: CQMode;
@@ -1063,6 +1092,7 @@ export type SystemConfigOAuthDto = {
     issuerUrl: string;
     mobileOverrideEnabled: boolean;
     mobileRedirectUri: string;
+    profileSigningAlgorithm: string;
     scope: string;
     signingAlgorithm: string;
     storageLabelClaim: string;
@@ -1977,6 +2007,20 @@ export function getMapMarkers({ fileCreatedAfter, fileCreatedBefore, isArchived,
         ...opts
     }));
 }
+export function reverseGeocode({ lat, lon }: {
+    lat: number;
+    lon: number;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: MapReverseGeocodeResponseDto[];
+    }>(`/map/reverse-geocode${QS.query(QS.explode({
+        lat,
+        lon
+    }))}`, {
+        ...opts
+    }));
+}
 export function getMapStyle({ key, theme }: {
     key?: string;
     theme: MapTheme;
@@ -2128,7 +2172,7 @@ export function unlinkOAuthAccount(opts?: Oazapfts.RequestOpts) {
     }));
 }
 export function getPartners({ direction }: {
-    direction: "shared-by" | "shared-with";
+    direction: PartnerDirection;
 }, opts?: Oazapfts.RequestOpts) {
     return oazapfts.ok(oazapfts.fetchJson<{
         status: 200;
@@ -2171,13 +2215,17 @@ export function updatePartner({ id, updatePartnerDto }: {
         body: updatePartnerDto
     })));
 }
-export function getAllPeople({ withHidden }: {
+export function getAllPeople({ page, size, withHidden }: {
+    page?: number;
+    size?: number;
     withHidden?: boolean;
 }, opts?: Oazapfts.RequestOpts) {
     return oazapfts.ok(oazapfts.fetchJson<{
         status: 200;
         data: PeopleResponseDto;
     }>(`/people${QS.query(QS.explode({
+        page,
+        size,
         withHidden
     }))}`, {
         ...opts
@@ -2230,6 +2278,9 @@ export function updatePerson({ id, personUpdateDto }: {
         body: personUpdateDto
     })));
 }
+/**
+ * This property was deprecated in v1.113.0
+ */
 export function getPersonAssets({ id }: {
     id: string;
 }, opts?: Oazapfts.RequestOpts) {
@@ -2381,8 +2432,9 @@ export function searchSmart({ smartSearchDto }: {
         body: smartSearchDto
     })));
 }
-export function getSearchSuggestions({ country, make, model, state, $type }: {
+export function getSearchSuggestions({ country, includeNull, make, model, state, $type }: {
     country?: string;
+    includeNull?: boolean;
     make?: string;
     model?: string;
     state?: string;
@@ -2393,6 +2445,7 @@ export function getSearchSuggestions({ country, make, model, state, $type }: {
         data: string[];
     }>(`/search/suggestions${QS.query(QS.explode({
         country,
+        includeNull,
         make,
         model,
         state,
@@ -2509,7 +2562,9 @@ export function deleteServerLicense(opts?: Oazapfts.RequestOpts) {
 export function getServerLicense(opts?: Oazapfts.RequestOpts) {
     return oazapfts.ok(oazapfts.fetchJson<{
         status: 200;
-        data: object;
+        data: LicenseResponseDto;
+    } | {
+        status: 404;
     }>("/server/license", {
         ...opts
     }));
@@ -3026,10 +3081,6 @@ export enum ReactionType {
     Comment = "comment",
     Like = "like"
 }
-export enum Type {
-    Comment = "comment",
-    Like = "like"
-}
 export enum UserAvatarColor {
     Primary = "primary",
     Pink = "pink",
@@ -3125,11 +3176,12 @@ export enum MapTheme {
     Light = "light",
     Dark = "dark"
 }
-export enum Type2 {
-    OnThisDay = "on_this_day"
-}
 export enum MemoryType {
     OnThisDay = "on_this_day"
+}
+export enum PartnerDirection {
+    SharedBy = "shared-by",
+    SharedWith = "shared-with"
 }
 export enum PathEntityType {
     Asset = "asset",
@@ -3172,6 +3224,12 @@ export enum AudioCodec {
     Mp3 = "mp3",
     Aac = "aac",
     Libopus = "libopus"
+}
+export enum VideoContainer {
+    Mov = "mov",
+    Mp4 = "mp4",
+    Ogg = "ogg",
+    Webm = "webm"
 }
 export enum VideoCodec {
     H264 = "h264",

@@ -65,7 +65,7 @@ class Ann(metaclass=_Singleton):
         self.input_shapes: dict[int, tuple[tuple[int], ...]] = {}
         self.ann: int | None = None
         self.new()
-        
+
         if self.tuning_file is not None:
             # make sure tuning file exists (without clearing contents)
             # once filled, the tuning file reduces the cost/time of the first
@@ -105,7 +105,7 @@ class Ann(metaclass=_Singleton):
             raise ValueError("model_path must be a file with extension .armnn, .tflite or .onnx")
         if not exists(model_path):
             raise ValueError("model_path must point to an existing file!")
-        
+
         save_cached_network = False
         if cached_network_path is not None and not exists(cached_network_path):
             save_cached_network = True
@@ -120,6 +120,8 @@ class Ann(metaclass=_Singleton):
             save_cached_network,
             cached_network_path.encode() if cached_network_path is not None else None,
         )
+        if net_id < 0:
+            raise ValueError("Cannot load model!")
 
         self.input_shapes[net_id] = tuple(
             self.shape(net_id, input=True, index=i) for i in range(self.tensors(net_id, input=True))

@@ -548,7 +548,7 @@
           >
             {#if viewMode !== ViewMode.SELECT_THUMBNAIL}
               <!-- ALBUM TITLE -->
-              <section class="pt-24">
+              <section class="pt-8 md:pt-24">
                 <AlbumTitle id={album.id} bind:albumName={album.albumName} {isOwned} />
 
                 {#if album.assetCount > 0}
@@ -604,7 +604,7 @@
                   </div>
                 {/if}
                 <!-- ALBUM DESCRIPTION -->
-                <AlbumDescription id={album.id} description={album.description} {isOwned} />
+                <AlbumDescription id={album.id} bind:description={album.description} {isOwned} />
               </section>
             {/if}
 

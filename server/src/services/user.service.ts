@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DateTime } from 'luxon';
-import { getClientLicensePublicKey } from 'src/config';
+import { getClientLicensePublicKey, getServerLicensePublicKey } from 'src/config';
 import { SALT_ROUNDS } from 'src/constants';
 import { StorageCore, StorageFolder } from 'src/cores/storage.core';
 import { SystemConfigCore } from 'src/cores/system-config.core';
@@ -15,7 +15,6 @@ import { IAlbumRepository } from 'src/interfaces/album.interface';
 import { ICryptoRepository } from 'src/interfaces/crypto.interface';
 import { IEntityJob, IJobRepository, JobName, JobStatus } from 'src/interfaces/job.interface';
 import { ILoggerRepository } from 'src/interfaces/logger.interface';
-import { IStackRepository } from 'src/interfaces/stack.interface';
 import { IStorageRepository } from 'src/interfaces/storage.interface';
 import { ISystemMetadataRepository } from 'src/interfaces/system-metadata.interface';
 import { IUserRepository, UserFindOptions } from 'src/interfaces/user.interface';
@@ -30,7 +29,6 @@ export class UserService {
     @Inject(IAlbumRepository) private albumRepository: IAlbumRepository,
     @Inject(ICryptoRepository) private cryptoRepository: ICryptoRepository,
     @Inject(IJobRepository) private jobRepository: IJobRepository,
-    @Inject(IStackRepository) private stackRepository: IStackRepository,
     @Inject(IStorageRepository) private storageRepository: IStorageRepository,
     @Inject(ISystemMetadataRepository) systemMetadataRepository: ISystemMetadataRepository,
     @Inject(IUserRepository) private userRepository: IUserRepository,
@@ -140,16 +138,23 @@ export class UserService {
   }
 
   async setLicense(auth: AuthDto, license: LicenseKeyDto): Promise<LicenseResponseDto> {
-    if (!license.licenseKey.startsWith('IMCL-')) {
+    if (!license.licenseKey.startsWith('IMCL-') && !license.licenseKey.startsWith('IMSV-')) {
       throw new BadRequestException('Invalid license key');
     }
-    const licenseValid = this.cryptoRepository.verifySha256(
+
+    const clientLicenseValid = this.cryptoRepository.verifySha256(
       license.licenseKey,
       license.activationKey,
       getClientLicensePublicKey(),
     );
 
-    if (!licenseValid) {
+    const serverLicenseValid = this.cryptoRepository.verifySha256(
+      license.licenseKey,
+      license.activationKey,
+      getServerLicensePublicKey(),
+    );
+
+    if (!clientLicenseValid && !serverLicenseValid) {
       throw new BadRequestException('Invalid license key');
     }
 
@@ -213,7 +218,6 @@ export class UserService {
     }
 
     this.logger.warn(`Removing user from database: ${user.id}`);
-    await this.stackRepository.deleteAll(user.id);
     await this.albumRepository.deleteAll(user.id);
     await this.userRepository.delete(user, true);
 

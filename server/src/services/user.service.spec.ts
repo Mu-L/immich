@@ -5,7 +5,6 @@ import { IAlbumRepository } from 'src/interfaces/album.interface';
 import { ICryptoRepository } from 'src/interfaces/crypto.interface';
 import { IJobRepository, JobName } from 'src/interfaces/job.interface';
 import { ILoggerRepository } from 'src/interfaces/logger.interface';
-import { IStackRepository } from 'src/interfaces/stack.interface';
 import { IStorageRepository } from 'src/interfaces/storage.interface';
 import { ISystemMetadataRepository } from 'src/interfaces/system-metadata.interface';
 import { IUserRepository } from 'src/interfaces/user.interface';
@@ -18,7 +17,6 @@ import { newAlbumRepositoryMock } from 'test/repositories/album.repository.mock'
 import { newCryptoRepositoryMock } from 'test/repositories/crypto.repository.mock';
 import { newJobRepositoryMock } from 'test/repositories/job.repository.mock';
 import { newLoggerRepositoryMock } from 'test/repositories/logger.repository.mock';
-import { newStackRepositoryMock } from 'test/repositories/stack.repository.mock';
 import { newStorageRepositoryMock } from 'test/repositories/storage.repository.mock';
 import { newSystemMetadataRepositoryMock } from 'test/repositories/system-metadata.repository.mock';
 import { newUserRepositoryMock } from 'test/repositories/user.repository.mock';
@@ -37,7 +35,6 @@ describe(UserService.name, () => {
 
   let albumMock: Mocked<IAlbumRepository>;
   let jobMock: Mocked<IJobRepository>;
-  let stackMock: Mocked<IStackRepository>;
   let storageMock: Mocked<IStorageRepository>;
   let systemMock: Mocked<ISystemMetadataRepository>;
   let loggerMock: Mocked<ILoggerRepository>;
@@ -47,21 +44,11 @@ describe(UserService.name, () => {
     systemMock = newSystemMetadataRepositoryMock();
     cryptoRepositoryMock = newCryptoRepositoryMock();
     jobMock = newJobRepositoryMock();
-    stackMock = newStackRepositoryMock();
     storageMock = newStorageRepositoryMock();
     userMock = newUserRepositoryMock();
     loggerMock = newLoggerRepositoryMock();
 
-    sut = new UserService(
-      albumMock,
-      cryptoRepositoryMock,
-      jobMock,
-      stackMock,
-      storageMock,
-      systemMock,
-      userMock,
-      loggerMock,
-    );
+    sut = new UserService(albumMock, cryptoRepositoryMock, jobMock, storageMock, systemMock, userMock, loggerMock);
 
     userMock.get.mockImplementation((userId) =>
       Promise.resolve([userStub.admin, userStub.user1].find((user) => user.id === userId) ?? null),
@@ -287,10 +274,22 @@ describe(UserService.name, () => {
   });
 
   describe('setLicense', () => {
-    it('should save license if valid', async () => {
+    it('should save client license if valid', async () => {
       userMock.upsertMetadata.mockResolvedValue();
 
       const license = { licenseKey: 'IMCL-license-key', activationKey: 'activation-key' };
+      await sut.setLicense(authStub.user1, license);
+
+      expect(userMock.upsertMetadata).toHaveBeenCalledWith(authStub.user1.user.id, {
+        key: UserMetadataKey.LICENSE,
+        value: expect.any(Object),
+      });
+    });
+
+    it('should save server license as client if valid', async () => {
+      userMock.upsertMetadata.mockResolvedValue();
+
+      const license = { licenseKey: 'IMSV-license-key', activationKey: 'activation-key' };
       await sut.setLicense(authStub.user1, license);
 
       expect(userMock.upsertMetadata).toHaveBeenCalledWith(authStub.user1.user.id, {
